@@ -1,0 +1,10 @@
+# Latex stuff
+*.aux
+*.bbl
+*.bbl
+*.fls
+*.fdb_latexmk
+*.out
+*.blg
+*.gz
+report.log
