@@ -8,3 +8,5 @@
 *.blg
 *.gz
 report.log
+
+.venv/
