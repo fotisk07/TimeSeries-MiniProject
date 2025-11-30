@@ -35,6 +35,14 @@ Messi Effet :
 - Analyser les matchs sans et avec messi pour montrer la diff de formation pour le barca et l'équipe adverse
 - Montrer la stationairité des joueurs (exemple messi centre droit mais en effet vient souvent au centre)
 
+### Meeting Notes 30/11 
+
+Présentation des résultats
+
+Timeline
+	-  Ecrire partie methode rapport avant Lundi 8/12
+	-  Peaufiner les experiences la dernière semaine avant de rendre le rapport
+
 
 
  
