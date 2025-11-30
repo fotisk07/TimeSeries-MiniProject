@@ -1,142 +1,65 @@
-%% Commands for TeXCount
-%TC:macro \cite [option:text,text]
-%TC:macro \citep [option:text,text]
-%TC:macro \citet [option:text,text]
-%TC:envir table 0 1
-%TC:envir table* 0 1
-%TC:envir tabular [ignore] word
-%TC:envir displaymath 0 word
-%TC:envir math 0 word
-%TC:envir comment 0 0
-
-\documentclass[sigconf]{acmart}
-
-
-\usepackage{bbm}
-
-
-%%
-%% \BibTeX command to typeset BibTeX logo in the docs
-\AtBeginDocument{%
-  \providecommand\BibTeX{{%
-    Bib\TeX}}}
-
-\settopmatter{printacmref=false} % removes ACM reference format
-\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference info
-
+\documentclass[11pt]{article}
+\usepackage{theme}
+\usepackage{shortcuts}
+% Document parameters
+% Document title
+\title{Mini-Project (ML for Time Series) - MVA 2025/2026}
+\author{
+Firstname Lastname \email{youremail1@mail.com} \\ % student 1
+Firstname Lastname \email{youremail2@mail.com} % student 2
+}
 
 \begin{document}
-
-\title{SoccerCPD : Formation and Role Change-Point Detection in Soccer Matches Using Spatiotemporal Tracking Data}
-
-\author{Adonis Jamal}
-\email{adonis.jamal@student-cs.fr}
-\affiliation{%
-  \institution{CentraleSupélec}
-  \city{Gif-sur-Yvette}
-  \country{France}
-}
-
-\author{Fotios Kapotos}
-\email{fotiskapotos@gmail.com}
-\affiliation{%
-  \institution{CentraleSupélec}
-  \city{Gif-sur-Yvette}
-  \country{France}
-}
-
-\begin{teaserfigure}
-  \includegraphics[width=\textwidth]{placeholder.jpg}
-  \caption{Place Holder Image}
-  \Description{Placeholder Image}
-\label{fig:teaser}
-\end{teaserfigure}
-
-
-
-\begin{abstract}
-  A clear and well-documented \LaTeX\ document is presented as an
-  article formatted for publication by ACM in a conference proceedings
-  or journal publication. Based on the ``acmart'' document class, this
-  article presents and explains many of the common variations, as well
-  as many of the formatting elements an author may use in the
-  preparation of the documentation of their work.
-\end{abstract}
-
-
-\keywords{Do, Not, Use, This, Code, Put, the, Correct, Terms, for,
-  Your, Paper}
-
-
-
-%%
-%% This command processes the author and affiliation and title
-%% information and builds the first part of the formatted document.
 \maketitle
 
-\section{Introduction}
-ACM's consolidated article template, introduced in 2017, provides a
-consistent \LaTeX\ style for use across ACM publications, and
-incorporates accessibility and metadata-extraction functionality
-necessary for future Digital Library endeavors. Numerous ACM and
-SIG-specific \LaTeX\ templates have been examined, and their unique
-features incorporated into this single new template.
+\paragraph{What is expected for these mini-projects?}
+The goal of the exercise is to read (and understand) a research article, implement it (or find an implementation), test it on real data and comment on the results obtained.
+Depending on the articles, the task will not always be the same: some articles are more theoretical or complex, others are in the direct line of the course, etc... It is therefore important to balance the exercise according to the article. For example, if you have reused an existing implementation, it is obvious that you will have to develop in a more detailed way the analysis of the results, the influence of the parameters etc... Do not hesitate to contact us by email if you wish to be guided.
 
-If you are new to publishing with ACM, this document is a valuable
-guide to the process of preparing your work for publication. If you
-have published with ACM before, this document provides insight and
-instruction into more recent changes to the article template.
-
-The ``\verb|acmart|'' document class can be used to prepare articles
-for any ACM publication --- conference or journal, and for any stage
-of publication, from review to final ``camera-ready'' copy, to the
-author's own version, with {\itshape very} few changes to the source.
+\paragraph{The report}
+ The report must be at most FIVE pages and use this template (excluding references). If needed, additional images and tables can be put in Appendix, but must be discussed in the main document. The report must contain a precise description of the work done, a description of the method, and the results of your tests. Please do not include source code! The report must clearly show the elements that you have done yourself and those that you have reused only, as well as the distribution of tasks within the team (see detailed plan below.)
+ 
+ \paragraph{The source code}
+In addition to this report, you will have to send us a Python notebook allowing to launch the code and to test it on data. For the data, you can find it on standard sites like Kaggle, or the site https://timeseriesclassification.com/ which contains a lot of signals!
 
 
-\section{Formation Change-Point Detection (FormCPD)}
+\paragraph{The oral presentations}
+They will last 10 minutes followed by 5 minutes of questions. The plan of the defense is the same as the one of the report: presentation of the work done, description of the method and analysis of the results.
 
 
-\section{Role Change-Point Detection (RoleCPD)}
-\subsection{Methodology}
-The goal of RoleCPD \cite{Kim2022SoccerCPD} is to detect long-term tactical changes in player roles (e.g., a winger swapping sides with another winger permanently) while ignoring temporary switches (e.g., overlapping runs or covering defensive duties). This process operates within a single Formation Period $(T_i)$ identified in the previous step.
-
-\subsection{Formal Representation}
-We define the inputs and mathematiccal framework based on the SoccerCPD protocol:
+\paragraph{Deadlines}
+Two sessions will be available :
 \begin{itemize}
-  \item \textbf{Input:} A sequence of "Temporary Role Permutations" $\{\pi_t\}_{t=1}^{|T_i|}$.
-  \item \textbf{Role Permutation ($\pi_t$):} At every frame $t$, the Role Representation step assigns a role $X_p$ to every player $p$. Since roles are distinct, this assignement is a permutation of the initial canonical role: $$\beta_t (p) = \pi_t (X_p)$$ Where $\beta_t$ is the player-to-temporary-role mapping at time $t$.
+ \item \textbf{Session 1}
+ \begin{itemize}
+  \item Deadline for report: December 14th (23:59)
+  \item Oral presentations: December 15th and 17th (precise times TBA)
+ \end{itemize}
+\item \textbf{Session 2}
+ \begin{itemize}
+  \item Deadline for report: January 4th (23:59)
+  \item Oral presentations: January, 5th and 7th (precise times TBA)
+ \end{itemize}
 \end{itemize}
 
-\subsection{The Distance Metric}
-To detect a change, we must quantify the difference between the team's configuration at time $t$ and time $t'$. Since the data consists of permutations (non-Euclidean), we cannot use standard Euclidean distance. We use the Hamming Distance normalized by the number of roles ($N = 10$ outfield players): $$d(\pi_t, \pi_{t'}) = \frac{1}{N} \sum_{p \in P} \mathbbm{1}_{\pi_t(X_p) \neq \pi_{t'}(X_p)}$$ This metric represents the "Switch Rate" or the proportion of players whose roles differ between two frames.
+\section{Introduction and contributions}
 
-\subsection{Change-Point Detection Algorithm}
-The paper utilizes Discrete g-segmentation, a graph-based change-point detection method effective for repeated observations in non-Euclidean space.
-The procedure is as follows:
-\begin{enumerate}
-  \item \textbf{Preprocessing:} Calculate the Switch Rate relative to the dominant permutation. Exclude frames with a switch rate $> 0.7$ (likely temporary switches during set-pieces or abnormal situations).
-  \item \textbf{Segmentation:} Apply the dectection algorithm recursively on the sequence of permutations using the Hamming distance.
-  \item \textbf{Significance Test:} A change point $\tau$ is significant if:
-    \begin{itemize}
-      \item The p-value of the scan statistic is $< 0.01$.
-      \item The segmentation duration is sufficient (robustness against noise).
-      \item The most frequent permutations (Instructed Roles) in the segments before and after $\tau$ must be distinct.
-    \end{itemize}
-\end{enumerate}
+The Introduction section (indicative length : less than 1 page) should detail the scientific context of the article you chose, as well as the task that you want to solve (especially if you apply it on novel data). \textbf{The last paragraph of the introduction must contain the following information}:
+\begin{itemize}
+    \item Repartition of work between the two students
+    \item Use of available source code or not, percentage of the source code that has been reused, etc.
+    \item Use of existing experiments or new experiments (e.g. test of the influence of parameter that was not conducted in the original article, application of the method on a novel task/data set etc.)
+    \item Improvement on the original method (e.g. new pre/post processing steps, grid search for optimal parameters etc.)
+\end{itemize}
 
+\section{Method}
 
+The Method section (indicative length : 1 to 2 pages) should describe the mathematical aspects of the method in a summarized manner. Only the main steps that are useful for understanding should be highlighted. If relevant, some details on implementation can be provided (but only marginally).
 
+\section{Data}
+The Data section (indicative length : 1 page) should provide a deep analysis of the data used for experiment. In particular, we are interested here in your capacity to provide relevant and thoughtful feedbacks on the data and to demonstrate that you master some "data diagnosis" tools that have been dealt with in the lectures/tutorials.
 
-
-
-
-
-%% The next two lines define the bibliography style to be used, and
-%% the bibliography file.
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{bib}
+\section{Results}
+The Result section (indicative length : 1 to 2 pages) \textbf{should display numerical simulations on real time series} (even if the original article was focused on images). If you re-used some existing implementations, it is expected that this section develops new experiments that were not present in the original article. Results should be discussed not only based on quantative scores but also on qualitative aspects. In particular (especially if your article focuses on black box methods), please provide some feedbacks whether the method was adapted to the data or not and whether the hypothesis behind the approach you used were validated or not.
 
 \end{document}
-\endinput
-%%
-%% End of file `sample-sigconf.tex'.
