@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.spatial.distance import pdist, squareform
 from collections import Counter
+import networkx as nx
 
 class RoleCPD:
     def __init__(self, n_players=10, switch_threshold=0.7):
@@ -48,6 +49,124 @@ class RoleCPD:
         
         return np.array(rates)
     
+    def graph_based_scan_statistic(self, valid_permutations):
+        """
+        Replicates the Scan Statistic R(t) from graph-based CPD
+        1. Build similarity graph (k-NN) based on Hamming distances
+        2. Count edges crossing the potential cut point t.
+
+        Args:
+            valid_permutations (list or np.array): List or array of shape (T, N) containing valid role permutations.
+
+        Returns:
+            list: List of detected change points.
+        """
+        T = len(valid_permutations)
+        if T < 10: return []
+
+        # Compute pairwise Hamming distances
+        pairwise_distances = squareform(pdist(valid_permutations, metric=self.hamming_distance))
+
+        # Build k-NN graph: we will use k=5
+        G = nx.Graph()
+        for i in range(T):
+            nearest = np.argsort(pairwise_distances[i])[1:6]  # skip self
+            for neighbor in nearest:
+                G.add_edge(i, neighbor)
+
+        # Compute scan statistic R(t)
+        scan_statistics = []
+
+        # We only scan the middle 80% to avoid edge effects
+        buffer = max(10, int(T * 0.1))
+        search_range = range(buffer, T - buffer)
+
+        for t in search_range:
+            # Count edges crossing the cut at t
+            cut_edges = 0
+            nodes_left = set(range(0, t))
+            nodes_right = set(range(t, T))
+
+            for u, v in G.edges():
+                if (u in nodes_left and v in nodes_right) or (u in nodes_right and v in nodes_left):
+                    cut_edges += 1
+            
+            scan_statistics.append(cut_edges)
+
+        # Find best t
+        best_t = search_range[np.argmin(scan_statistics)]
+        return [best_t]
+    
+    def decompose_cycles(self, permutation, canonical_roles):
+        """
+        Decomposes a permutation into disjoint cycles.
+
+        Args:
+            permutation (list or np.array): A permutation representing roles.
+            canonical_roles (list or np.array): The canonical roles to compare against.
+        
+        Returns:
+            list: List of cycles, each cycle is a list of indices.
+        """
+        checked = set()
+        cycles = []
+
+        for i in range(len(permutation)):
+            if i in checked:
+                continue
+
+            current = i
+            path = [current]
+            while True:
+                next_role = permutation[current]
+
+                if next_role == i:
+                    break
+
+                if next_role in checked:
+                    break
+
+                path.append(next_role)
+                current = next_role
+            
+            for node in path:
+                checked.add(node)
+
+            if len(path) > 1:
+                cycles.append(tuple(path))
+        
+        return cycles
+    
+    def analyze_messi_effect(self, permutations, messi_role_index):
+        """
+        Experiment to prove Messi's low stationarity.
+        1. Calculate percentage of frames where Messi is not in his instructed role.
+        2. Find the most frequent cycle involving Messi.
+
+        Args:
+            permutations (): _description_
+            messi_role_index (): _description_
+        
+        Returns:
+        """
+        drift_count = 0
+        cycle_counts = Counter()
+
+        base_identity = np.arange(self.N)
+
+        for perm in permutations:
+            # Check if Messi drifted
+            if perm[messi_role_index] != base_identity[messi_role_index]:
+                drift_count += 1
+
+                # Find the specific cycle involving Messi
+                cycles = self.decompose_cycles(perm, base_identity)
+                for cycle in cycles:
+                    if messi_role_index in cycle:
+                        cycle_counts[cycle] += 1
+            
+        return drift_count / len(permutations), cycle_counts.most_common(5)
+
     def fit_predict(self, permutations):
         """
         Fit the model and predict change points in a sequence of role permutations.
@@ -166,6 +285,7 @@ def run_experiment():
     plt.legend()
     plt.grid(True)
     plt.show()
+
 
 if __name__ == "__main__":
     run_experiment()

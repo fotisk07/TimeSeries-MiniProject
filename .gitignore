@@ -10,3 +10,5 @@
 report.log
 
 .venv/
+__pycache__/RoleCPD.cpython-310.pyc
+report/report.xsim

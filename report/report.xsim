@@ -5,9 +5,12 @@
 \XSIM{totalgoal}{points}{0}
 \XSIM{goal}{exercise}{bonus-points}{0}
 \XSIM{totalgoal}{bonus-points}{0}
+\XSIM{order}{}
 \XSIM{use}{}
+\XSIM{use!}{}
 \XSIM{used}{}
 \XSIM{print}{}
+\XSIM{print!}{}
 \XSIM{printed}{}
 \XSIM{total-number}{0}
 \XSIM{exercise}{0}
@@ -15,6 +18,7 @@
 \XSIM{idtypes}{}
 \XSIM{collections}{}
 \XSIM{collection:all exercises}{}
+\setcounter{totalexerciseinall exercises}{0}
 \XSIM{id}{}
 \XSIM{ID}{}
 \XSIM{counter}{}
