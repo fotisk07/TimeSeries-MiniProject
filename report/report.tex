@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage{theme}
+\usepackage{subcaption}
 \usepackage{shortcuts}
 % Document parameters
 % Document title
@@ -55,6 +56,88 @@ The Introduction section (indicative length : less than 1 page) should detail th
 
 \section{Methodology}
 \subsection{Formation Change-Point Detection (FormCPD)}
+
+This subsection presents the full pipeline used to detect tactical formation changes (FormCPD), introduced in \cite{Kim2022SoccerCPD}. The objective is to start from a sequence of feature matrices $\{A(t)\}_{t \in T}$ and infer a partition of the timeline into segments $T_1 < \cdots < T_m$ such that, for all $t \in T_i$, the features $A(t)$ follow a common underlying distribution $\mathcal{F}_i$.
+
+Our presentation proceeds in four steps:
+\begin{enumerate}
+  \item estimation of consistent player roles using a constrained expectation--maximization algorithm combined with frame-wise Hungarian matching (Section~4.1.1),
+  \item construction of role-adjacency matrices via Delaunay triangulation of the role positions (Section~4.1.2),
+  \item detection of formation change-points on the resulting graph sequence using discrete g-segmentation with a Manhattan distance metric (Section~4.2),
+  \item clustering of segmented formations through role alignment and hierarchical aggregation to extract canonical formation types (Section~4.3).
+\end{enumerate}
+
+\subsubsection{Role Assignment via Constrained EM}
+
+The first stage of FormCPD consists in assigning each player a \emph{latent spatial role} at every frame, following the representation proposed by Bialkowski et al.~\cite{bialkowski2014}. The goal is to model persistent spatial zones rather than player identities, as players may temporarily exchange positions while the global formation remains unchanged.
+
+Each role \( k \in \{1,\dots,N\} \) is modeled as a Gaussian component with parameters \( (\mu_k, \Sigma_k) \). At time \( t \), an observed player position \( x_{i,t} \in \mathbb{R}^2 \) is assumed to follow
+\[
+x_{i,t} \sim \mathcal{N}(\mu_{z_{i,t}}, \Sigma_{z_{i,t}}),
+\]
+with the hard constraint that no two players may occupy the same role at a given frame. Estimation is performed using an EM procedure. During the E-step, a cost matrix is built from negative log-likelihoods and a Hungarian assignment enforces a one-to-one mapping between players and roles at each frame. During the M-step, role means and covariances are updated using all positions assigned to each role over the session.
+
+Unlike standard Gaussian mixture models, responsibilities are both \emph{hard} and \emph{frame-wise coupled} through Hungarian matching, while temporal consistency is implicitly enforced by sharing role parameters across frames.
+
+Figure~\ref{fig:role_swap} illustrates the effect of this representation on a simulated role-swapping scenario. When trajectories are colored by player identity, crossings obscure any stable spatial structure. Recoloring the same data by estimated roles instead reveals coherent clusters: players exchange colors as they change positions, while role labels remain anchored to fixed spatial zones. This demonstrates the key motivation of role-based modeling. However, the approach assumes that spatial roles are sufficiently separable; when clusters overlap or positional variance becomes large, role estimation may become unstable.
+
+\begin{figure}
+    \includegraphics[width=1\linewidth]{figures/role_swap.png}
+    \caption{Player versus role-based coloring of trajectories during a simulated position swap.}
+    \label{fig:role_swap}
+\end{figure}
+
+\subsubsection{Encoding Spatial Structure via Delaunay Triangulation}
+
+Once role assignments are available, each frame is encoded as a graph describing the local spatial relationships between roles. This is obtained by computing a Delaunay triangulation of the role locations
+\[
+V(t) = \{v_1(t), \dots, v_N(t)\} \subset \mathbb{R}^2 .
+\]
+
+The Delaunay triangulation connects two roles when they share an edge in the triangulated mesh, defining adjacency based solely on relative geometry without introducing distance thresholds or fixed neighborhood sizes. From this, a binary role-adjacency matrix
+\[
+A(t) \in \{0,1\}^{N \times N}
+\]
+is constructed as
+\[
+A_{k\ell}(t) =
+\begin{cases}
+1, & \text{if roles } v_k(t) \text{ and } v_\ell(t) \text{ are adjacent,} \\
+0, & \text{otherwise.}
+\end{cases}
+\]
+
+Each frame is therefore represented as an undirected graph whose vertices correspond to roles and whose edges encode local spatial proximity. This representation emphasizes the \emph{topological} structure of the formation rather than precise metric distances. Combined with role indexing, it remains invariant to player permutations: transient exchanges of positions do not alter the role-adjacency graph as long as players remain within the same spatial zones.
+
+Figure~\ref{fig:delaunay_examples} shows Delaunay triangulations computed from simulated role positions before and after a formation change from 4--4--2 to 3--4--3. The change induces a clear reconfiguration of spatial adjacency relationships.
+
+Figure~\ref{fig:adjacency_experiment} presents the corresponding role-adjacency matrices. Instantaneous matrices (top row) exhibit small fluctuations due to geometric noise, whereas averaging over each formation segment (bottom row) yields stable, formation-specific patterns used as inputs for clustering.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/delany_form_change.png}
+    \caption{Delaunay triangulations of role locations at two frames before and after a synthetic formation change (4--4--2 $\rightarrow$ 3--4--3). Nodes represent roles and edges represent spatial adjacencies.}
+    \label{fig:delaunay_examples}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[height=3.8cm,keepaspectratio]{figures/A_examples.png}
+        \caption{Single-frame binary adjacency matrices before and after the simulated formation change (4--4--2 $\rightarrow$ 3--4--3).}
+        \label{fig:adj_frames}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[height=3.8cm,keepaspectratio]{figures/A_mean.png}
+        \caption{Mean role-adjacency matrices averaged over each formation period}
+        \label{fig:adj_means}
+    \end{subfigure}
+    \caption{Delaunay-based adjacency representation on a synthetic formation change.}
+    \label{fig:adjacency_experiment}
+\end{figure}
 
 
 
