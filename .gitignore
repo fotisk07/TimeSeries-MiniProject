@@ -12,7 +12,7 @@
 report.log
 
 .venv/
-__pycache__/RoleCPD.cpython-310.pyc
+__pycache__/
 report/report.xsim
 *.parquet
 
