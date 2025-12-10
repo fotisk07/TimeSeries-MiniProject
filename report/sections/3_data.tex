@@ -1,2 +1,21 @@
 \section{Data}
-The Data section (indicative length : 1 page) should provide a deep analysis of the data used for experiment. In particular, we are interested here in your capacity to provide relevant and thoughtful feedbacks on the data and to demonstrate that you master some "data diagnosis" tools that have been dealt with in the lectures/tutorials.
+% The Data section (indicative length : 1 page) should provide a deep analysis of the data used for experiment. In particular, we are interested here in your capacity to provide relevant and thoughtful feedbacks on the data and to demonstrate that you master some "data diagnosis" tools that have been dealt with in the lectures/tutorials.
+
+Our study utilizes two distinct types of spatiotemporal datasets to evaluate the SoccerCPD framework: high-frequency GPS tracking data used in the original SoccerCPD study, and event-stream data for our novel "Messi Effect" experiment. This section analyzes the properties, quality, and preprocessing requirements of these signals.
+
+\subsection{Fitogether Tracking Data}
+For the reproduction of the core algorithm and methods, we utilized the sample dataset provided by the authors.
+\begin{itemize}
+    \item \textbf{Source & Format:} The data originates from the K-League (South Korea) and consists of player trajectories recorded at 10 Hz. The raw input is a sequence of 2D coordinates $x_{i,t} \in \mathbb{R}^2$ representing the position of player $i$ at frame $t$.
+    \item \textbf{Data Diagnosis & Quality:} We performed a preliminary diagnosis of the signal stationarity and completeness. The tracking data is relatively clean, with practically no gaps (missing values $< 1\%$). However, we observed high-frequency jitter in the raw trajectories, consistent with GPS measurement noise.
+    \item \textbf{Preprocessing:} To satisfy the model's assumption that role centers follow a Gaussian distribution, we normalized the pitch coordinates to a centered metric system (meters relative to the pitch center). 
+\end{itemize}
+
+\subsection{StatsBomb Event Data}
+To investigate the structural impact of Lionel Messi on team dynamics and formations (what we term the "Messi Effect"), we utilized the StatsBomb Open Data repository. This dataset differs fundamentally from the Fitogether data, presenting unique challengs for the SoccerCPD pipeline. High-frequency GPS tracking data is not publicly available for matches involving Messi, so we relied on event-stream data.
+
+\subsubsection{Signal Characteristics and Challenges}
+
+\subsubsection{Adaptation and Preprocessing}
+
+\subsection{Statistical Properties and Gaussian Assumptions}
