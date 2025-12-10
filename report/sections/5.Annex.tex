@@ -1,0 +1,51 @@
+\section{Appendix: Visual Examples for FormCPD}
+\label{sec:annex_formcpd}
+
+This appendix gathers all visual material related to the FormCPD pipeline
+(Role assignment, Delaunay encoding, and adjacency representations) referenced
+in Section~\ref{sec:formcpd}.
+
+% -------------------------
+% Role assignment example
+% -------------------------
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{../figures/role_swap.png}
+    \caption{Player versus role-based coloring of trajectories during a simulated position swap.}
+    \label{fig:role_swap}
+\end{figure}
+
+% -------------------------
+% Delaunay triangulation
+% -------------------------
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figures/delany_form_change.png}
+    \caption{Delaunay triangulations of role locations at two frames before and after a synthetic formation change (4--4--2 $\rightarrow$ 3--4--3).}
+    \label{fig:delaunay_examples}
+\end{figure}
+
+% -------------------------
+% Adjacency matrices
+% -------------------------
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[height=3.8cm,keepaspectratio]{../figures/A_examples.png}
+        \caption{Single-frame binary adjacency matrices before and after the simulated formation change (4--4--2 $\rightarrow$ 3--4--3) (Green = 1).}
+        \label{fig:adj_frames}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[height=3.8cm,keepaspectratio]{../figures/A_mean.png}
+        \caption{Mean role-adjacency matrices averaged over each formation period (Green = 1).}
+        \label{fig:adj_means}
+    \end{subfigure}
+    \caption{Delaunay-based adjacency representation on a synthetic formation change.}
+    \label{fig:adjacency_experiment}
+\end{figure}
