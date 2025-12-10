@@ -7,8 +7,14 @@
 *.out
 *.blg
 *.gz
+*.log
+*.xsim
 report.log
 
 .venv/
 __pycache__/RoleCPD.cpython-310.pyc
 report/report.xsim
+*.parquet
+
+main.log
+main.xsim
