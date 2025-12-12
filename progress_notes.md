@@ -46,3 +46,10 @@ Timeline
 
 
  
+
+Pertinence SoccerCPD
+Stationnarité des joueurs
+Defensive/offensive formation
+Explore pseudo trajectories from Statsbomb
+
+Mettre de cote Messi effect.
