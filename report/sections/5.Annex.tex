@@ -49,3 +49,53 @@ in Section~\ref{sec:formcpd}.
     \caption{Delaunay-based adjacency representation on a synthetic formation change.}
     \label{fig:adjacency_experiment}
 \end{figure}
+
+
+
+% -------------------------
+% ROLECPD VISUALS
+% -------------------------
+\section{Appendix: Visual Examples for RoleCPD}
+\label{sec:annex_rolecpd}
+
+This appendix gathers all visual material related to the RoleCPD pipeline (Hamming distance, Change Point Detection, and Segmentation) referenced in Section~\ref{sec:rolecpd}.
+
+% -------------------------
+% Ground truth
+% -------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figures/RoleCPD_GroundTruth.png}
+    \caption{Ground truth role assignments over time with two tactical switches at frames 150 and 300.}
+    \label{fig:rolecpd_groundtruth}
+\end{figure}
+
+% -------------------------
+% Hamming distance
+% -------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figures/RoleCPD_SwitchRate.png}
+    \caption{Hamming distance-based switch rate time series used for change point detection.}
+    \label{fig:rolecpd_switchrate}
+\end{figure}
+
+% -------------------------
+% One Detected Phase
+% -------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figures/RoleCPD_OneDetectedPhase.png}
+    \caption{Visualization of one detected tactical phase with dominant role assignments. This shows the need for recursive segmentation to capture multiple phases.}
+    \label{fig:rolecpd_onedetectedphase}
+\end{figure}
+
+% -------------------------
+% Detected Phases
+% -------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figures/RoleCPD_DetectedPhases.png}
+    \caption{Visualization of all detected tactical phases after recursive binary segmentation, showing accurate recovery of the ground truth phases.}
+    \label{fig:rolecpd_detectedphases}
+\end{figure}
