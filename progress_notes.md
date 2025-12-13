@@ -53,3 +53,36 @@ Defensive/offensive formation
 Explore pseudo trajectories from Statsbomb
 
 Mettre de cote Messi effect.
+
+
+
+#### CODE A RENDRE ####
+Structure du Jupyter: 
+I. Methodes
+1. FormCPD
+2. RoleCPD
+II. Data
+1. Preprocessing
+III. Experiments
+1. SoccerCPD
+2. Attack/Defense formations
+3. Stationarity of players
+4. Pseudo trajectories from Statsbomb
+
+#### RAPPORT A RENDRE ####
+Introduction: un peu trop longue, raccourcir. Changer experiments, source codes.
+Data: nouvelles données, où elles sont, comment on les traite. SoccerCPD (R) pénible à utiliser.
+Results: à rédiger. Suivre experiments.
+Conclusion: mini paragraphe à rédiger.
+
+
+D'ici 1h 
+finaliser ma partie (Adonis).
+finaliser soccerCPD (Fotis).
+
+Ce soir:
+Jupyter complet. (Fotis)
+Experiments (Fotis)
+Introduction + Conclusion + Resultats (Adonis)
+
+
