@@ -16,6 +16,7 @@ report.log
 __pycache__/
 report/report.xsim
 *.parquet
+opendata/ 
 
 main.log
 main.xsim
