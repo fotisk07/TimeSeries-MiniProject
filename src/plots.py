@@ -115,3 +115,30 @@ def plot_method_cp_timeline(results, title):
     plt.title(title)
     plt.grid(axis="x", alpha=0.3)
     plt.tight_layout()
+
+def generate_heatmap_comparison(ax, gps_data, sb_events, METRIC_X_RANGE,METRIC_Y_RANGE):    
+    # Plot 1: GPS Data (Continuous)
+    ax1 = ax[0]
+    h1 = ax1.hist2d(gps_data['x'], gps_data['y'], bins=50, cmap='inferno', 
+                    range=[METRIC_X_RANGE, METRIC_Y_RANGE], cmin=1)
+    ax1.set_title("Fitogether GPS Data\n(Continuous 10Hz Signal)")
+    ax1.set_aspect('equal')
+    ax1.set_xlabel("Length (m)")
+    ax1.set_ylabel("Width (m)")
+    
+    # Plot 2: Event Data (Sparse)
+    ax2 = ax[1]
+    if sb_events is not None:
+        h2 = ax2.hist2d(sb_events['x_metric'], sb_events['y_metric'], bins=50, cmap='inferno', 
+                        range=[METRIC_X_RANGE, METRIC_Y_RANGE], cmin=1)
+        ax2.set_title("StatsBomb Event Data\n(Sparse Event Stream)")
+    else:
+        ax2.text(0.5, 0.5, "Data Unavailable", ha='center')
+        ax2.set_title("StatsBomb Event Data (Unavailable)")
+        
+    ax2.set_aspect('equal')
+    ax2.set_xlabel("Length (m)")
+    
+    plt.suptitle("Spatial Density and Signal Structure Comparison", fontsize=14)
+
+    return ax
