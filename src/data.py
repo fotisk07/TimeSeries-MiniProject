@@ -166,8 +166,27 @@ class FitogetherDiagnosis:
             self.data['y'] = self.data['y'] / 100.0
 
         # Transform from SoccerCPD coordinates to Metric coordinates
-        self.data['x'] = (self.data['x'] / 120.0 * PITCH_LENGTH) - (PITCH_LENGTH / 2)
-        self.data['y'] = (PITCH_WIDTH / 2) - (self.data['y'] / 80.0 * PITCH_WIDTH)
+        min_x, max_x = self.data['x'].min(), self.data['x'].max()
+        min_y, max_y = self.data['y'].min(), self.data['y'].max()
+
+        # Case A: Already Metric (Centered, ~ -52 to 52)
+        if min_x < -10:
+            print("Format: Metric (Centered). No transformation needed.")
+            
+        # Case B: Last Row Format (0-100 on X and Y)
+        # Detected if Y goes above 85 (since standard format stops at 80)
+        elif max_y > 85.0:
+            print("Format: Last Row (0-100). Transforming...")
+            # Scale 100 -> 105m (Length) and 100 -> 68m (Width)
+            self.data['x'] = (self.data['x'] / 100.0 * PITCH_LENGTH) - (PITCH_LENGTH / 2)
+            self.data['y'] = (PITCH_WIDTH / 2) - (self.data['y'] / 100.0 * PITCH_WIDTH)
+
+        # Case C: SoccerCPD/Fitogether Format (0-120 X, 0-80 Y)
+        # Default for positive coordinates
+        else:
+            print("Format: SoccerCPD (0-120). Transforming...")
+            self.data['x'] = (self.data['x'] / 120.0 * PITCH_LENGTH) - (PITCH_LENGTH / 2)
+            self.data['y'] = (PITCH_WIDTH / 2) - (self.data['y'] / 80.0 * PITCH_WIDTH)
 
         self.check_and_fix_orientation()
             
