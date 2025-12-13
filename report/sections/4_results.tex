@@ -1,3 +1,51 @@
 \section{Results}
 
-The Result section (indicative length : 1 to 2 pages) \textbf{should display numerical simulations on real time series} (even if the original article was focused on images). If you re-used some existing implementations, it is expected that this section develops new experiments that were not present in the original article. Results should be discussed not only based on quantative scores but also on qualitative aspects. In particular (especially if your article focuses on black box methods), please provide some feedbacks whether the method was adapted to the data or not and whether the hypothesis behind the approach you used were validated or not.
+\paragraph{Comparison across CPD backends (single match).}
+We compare several formation CPD backends (\texttt{gseg\_avg}, \texttt{gseg\_union}, \texttt{kernel\_rbf}, \texttt{kernel\_linear}) on a single reference match, using identical preprocessing and hyperparameters. The goal is not to rank methods, but to assess whether different CPD formulations yield compatible formation change-point timelines.
+
+Figure \ref{fig:exp1_cp_timeline_methods} shows the detected formation change-points for each backend on a common timeline. Despite differences in underlying detection principles, most methods identify change-points at similar temporal locations, indicating a shared high-level segmentation of the match. Minor discrepancies mainly correspond to additional or missing change-points rather than large temporal shifts, suggesting differences in sensitivity rather than fundamentally different interpretations of the match dynamics.
+
+Overall, this experiment indicates that formation change-points are largely consistent across CPD backends for this match. Since the analysis is restricted to a single game, these observations should be interpreted qualitatively and primarily serve to illustrate methodological robustness rather than general performance.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figures/CPD_backends.png}
+    \caption{
+    Formation change-points detected by different CPD backends on a common timeline.
+    }
+    \label{fig:exp1_cp_timeline_methods}
+\end{figure}
+
+
+\subsection{Experiments using SoccerCPD}
+
+\paragraph{Sensitivity analysis of formation CPD (single match).}
+We evaluate the sensitivity of the formation change-point detection (CPD) pipeline to its main hyperparameters on a single reference match. All experiments use the same CPD backend (\texttt{gseg\_avg}), and one parameter is varied at a time while keeping the others fixed.
+
+We first study the impact of the formation distance threshold \(\texttt{min\_fdist}\), which controls the minimum Manhattan distance between mean formation graphs required to validate a change-point. As \(\texttt{min\_fdist}\) increases, the number of detected formation segments decreases monotonically, indicating that higher thresholds progressively filter out minor structural variations. Importantly, the remaining change-points occur at consistent temporal locations, suggesting that \(\texttt{min\_fdist}\) mainly acts as a pruning mechanism rather than inducing temporal instability.
+
+We then analyze sensitivity to the minimum period duration \(\texttt{min\_pdur}\), which enforces a lower bound on segment length. Over the tested range, both the number and locations of detected change-points remain unchanged, indicating that the formation changes identified in this match are temporally well separated and not driven by short-lived fluctuations.
+
+Overall, these results suggest that, for this match, formation change-points are robust to reasonable variations in temporal resolution and structural significance thresholds. Since the analysis is conducted on a single match, these findings should be interpreted as illustrative rather than representative, motivating a broader multi-match evaluation.
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[t]{0.42\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{../figures/min_fdist.png}
+        \caption{Number of formation segments}
+        \label{fig:exp2_segments_fdist}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.55\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{../figures/exp2_cp_timeline_min_fdist.png}
+        \caption{Formation change-point timeline}
+        \label{fig:exp2_cp_timeline_fdist}
+    \end{subfigure}
+    \caption{
+    Sensitivity of formation change-point detection to the formation distance threshold \texttt{min\_fdist}.
+    Increasing the threshold reduces the number of detected segments while preserving the temporal locations of the most salient change-points.
+    }
+    \label{fig:exp2_fdist}
+\end{figure}
