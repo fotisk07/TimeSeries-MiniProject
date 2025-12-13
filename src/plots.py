@@ -1,5 +1,6 @@
 from scipy.spatial import Delaunay
 import matplotlib.pyplot as plt
+import numpy as np
 
 def plot_delaunay(ax, V_frame, title):
     tri = Delaunay(V_frame)
@@ -142,3 +143,34 @@ def generate_heatmap_comparison(ax, gps_data, sb_events, METRIC_X_RANGE,METRIC_Y
     plt.suptitle("Spatial Density and Signal Structure Comparison", fontsize=14)
 
     return ax
+
+# Helper function to plot formations
+def plot_formation(ax, mu, title, color):
+    # Safety check: if data has NaNs or Infs, skip plotting to prevent crash
+    if np.isnan(mu).any() or np.isinf(mu).any():
+        ax.text(0, 0, "Invalid Data (NaN/Inf)", ha='center', color='red')
+        ax.axis('off')
+        return
+
+    try:
+        tri = Delaunay(mu)
+        ax.triplot(mu[:, 0], mu[:, 1], tri.simplices, color='gray', linestyle=':', alpha=0.5)
+        ax.scatter(mu[:, 0], mu[:, 1], s=200, c=color, edgecolors='black', zorder=5)
+        for i, (x, y) in enumerate(mu):
+            ax.text(x, y, str(i), fontsize=12, ha='center', va='center', color='white', fontweight='bold')
+    except Exception as e:
+        ax.text(0, 0, "Plot Error", ha='center', color='red')
+    
+    # Pitch Layout
+    pitch_length = 105
+    pitch_width = 68
+    ax.axvline(-pitch_length/2, color='k', lw=2)
+    ax.axvline(pitch_length/2, color='k', lw=2)
+    ax.axhline(-pitch_width/2, color='k', lw=2)
+    ax.axhline(pitch_width/2, color='k', lw=2)
+    ax.set_xlim(-(pitch_length/2 + 5), (pitch_length/2 + 5))
+    ax.set_ylim(-(pitch_width/2 + 5), (pitch_width/2 + 5))
+    ax.set_aspect('equal', adjustable='box')
+    ax.set_title(title, fontsize=10)
+    ax.set_xlabel("Length (m)")
+    ax.set_ylabel("Width (m)")

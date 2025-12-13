@@ -118,7 +118,6 @@ def load_and_prepare_match(activity_id=17985):
     return match
 
 
-
 class FitogetherDiagnosis:
     """
     Handles loading, diagnosis, and validation of 10Hz GPS tracking data used by the Fitogether Inc. (SoccerCPD) researchers.
@@ -150,28 +149,27 @@ class FitogetherDiagnosis:
             print("Orientation is left to right. No changes made.")
 
     def load_or_generate_data(self, PITCH_LENGTH,PITCH_WIDTH):
-        if self.data_path and pd.io.common.file_exists(self.data_path):
-            print(f"Loading data from {self.data_path}.")
-            # K-League (SoccerCPD) data is available in a .ugp format.
-            self.data = pd.read_pickle(self.data_path)
-            
-            if 'unixtime' in self.data.columns:
-                self.data = self.data.rename(columns={'unixtime': 'frame'})
-
-            # Convert from cm to m if necessary
-            if self.data['x'].abs().max() > 150:
-                self.data['x'] = self.data['x'] / 100.0
-                self.data['y'] = self.data['y'] / 100.0
-
-            # Transform from SoccerCPD coordinates to Metric coordinates
-            self.data['x'] = (self.data['x'] / 120.0 * PITCH_LENGTH) - (PITCH_LENGTH / 2)
-            self.data['y'] = (PITCH_WIDTH / 2) - (self.data['y'] / 80.0 * PITCH_WIDTH)
-
-            self.check_and_fix_orientation()
-
+        print(f"Loading data from {self.data_path}.")
+        # K-League (SoccerCPD) data is available in a .ugp format.
+        print(self.data_path.split(".")[-1])
+        if self.data_path.split(".")[-1] == "parquet":
+                self.data = pd.read_parquet(self.data_path)
         else:
-            print("Data file not found. Generating synthetic 10Hz data.")
-            self.data = self._generate_synthetic_data()
+            self.data = pd.read_pickle(self.data_path)
+        
+        if 'unixtime' in self.data.columns:
+            self.data = self.data.rename(columns={'unixtime': 'frame'})
+
+        # Convert from cm to m if necessary
+        if self.data['x'].abs().max() > 150:
+            self.data['x'] = self.data['x'] / 100.0
+            self.data['y'] = self.data['y'] / 100.0
+
+        # Transform from SoccerCPD coordinates to Metric coordinates
+        self.data['x'] = (self.data['x'] / 120.0 * PITCH_LENGTH) - (PITCH_LENGTH / 2)
+        self.data['y'] = (PITCH_WIDTH / 2) - (self.data['y'] / 80.0 * PITCH_WIDTH)
+
+        self.check_and_fix_orientation()
             
         return self.data
 
@@ -369,3 +367,72 @@ class StatsBombAdapter:
         
         print(f"Generated {len(pseudo_traj)} pseudo-trajectory points (centroids).")
         return pseudo_traj
+    
+
+def get_stitched_tensor(df, n_slots=10):
+    """
+    Stitches disjoint player trajectories into 'n_slots' continuous tracks.
+    This handles substitutions (e.g. Player A off, Player B on -> Slot 1).
+    """
+    # Identify temporal range for each player
+    player_ranges = []
+    for pid, group in df.groupby('player_id'):
+        start = group['frame'].min()
+        end = group['frame'].max()
+        duration = len(group)
+        player_ranges.append({
+            'player_id': pid,
+            'start': start,
+            'end': end,
+            'duration': duration,
+            'data': group.set_index('frame')[['x', 'y']]
+        })
+    
+    # Sort players by duration (longest playing time first) to identify core players
+    player_ranges.sort(key=lambda x: x['duration'], reverse=True)
+    
+    # Assign players to slots
+    # List of dicts: {'end_frame': int, 'data': series}
+    slots = []
+    
+    for p in player_ranges:
+        assigned = False
+        # Try to fit into an existing slot (substitution)
+        for s in slots:
+            # Check if this player starts after the slot ends (plus a small buffer)
+            if p['start'] > s['end_frame'] + 10: # 10 frames buffer
+                s['parts'].append(p)
+                s['end_frame'] = max(s['end_frame'], p['end'])
+                assigned = True
+                print(f"Stitched Player {p['player_id']} into Slot {s['id']}")
+                break
+        
+        # If not assigned, create a new slot
+        if not assigned:
+            slots.append({
+                'id': len(slots),
+                'end_frame': p['end'],
+                'parts': [p]
+            })
+            
+    # Filter to top N slots
+    if len(slots) > n_slots:
+        print(f"Found {len(slots)} distinct tracks. Keeping top {n_slots} by duration.")
+        for s in slots:
+            s['total_duration'] = sum(p['duration'] for p in s['parts'])
+        slots.sort(key=lambda x: x['total_duration'], reverse=True)
+        slots = slots[:n_slots]
+        
+    # Construct the Tensor
+    frames = sorted(df['frame'].unique())
+    n_frames = len(frames)
+    frame_map = {f: i for i, f in enumerate(frames)}
+    
+    X_tensor = np.full((n_frames, n_slots, 2), np.nan)
+    
+    for i, s in enumerate(slots):
+        for part in s['parts']:
+            indices = [frame_map[f] for f in part['data'].index if f in frame_map]
+            X_tensor[indices, i, :] = part['data'].loc[list(part['data'].index)].values
+            
+    return X_tensor

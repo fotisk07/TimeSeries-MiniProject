@@ -277,3 +277,38 @@ def detect_formation_changes(A,
         "segments": segments
     }
 
+# We also define a pure Python version of the formation change detection in case of R/gSeg issues.
+def detect_formation_changes_python(adjacency_sequence, min_minutes=5, n_bkps=4):
+    """
+    Detects formation changes using the Kernel Change Point Detection (Python only).
+    Replaces the unstable R/gSeg implementation.
+    """
+    # Flatten (T, 10, 10) matrices into (T, 100) vectors
+    T_sub = adjacency_sequence.shape[0]
+    data_flat = adjacency_sequence.reshape(T_sub, -1)
+    
+    # Calculate minimum segment size in frames (1Hz assumption)
+    min_size = min_minutes * 60 
+    
+    # Use Binary Segmentation
+    try:
+        algo = rpt.Binseg(model="l2", min_size=min_size).fit(data_flat)
+        change_points = algo.predict(n_bkps=n_bkps)
+    except Exception as e:
+        print(f"Warning: Segmentation failed - {e}.")
+        change_points = [T_sub]
+
+    # Format results like the original output
+    bkps = sorted(list(set([0] + change_points + [T_sub])))
+    
+    # Create segments list [(start, end), (start, end)...]
+    segments = []
+    for i in range(len(bkps) - 1):
+        segments.append((bkps[i], bkps[i+1]))
+    internal_cps = [cp for cp in bkps if cp != 0 and cp != T_sub]
+    
+    return {
+        'num_phases': len(segments),
+        'change_points': internal_cps,
+        'segments': segments
+    }
