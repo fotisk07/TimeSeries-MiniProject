@@ -75,7 +75,6 @@ Data: nouvelles données, où elles sont, comment on les traite. SoccerCPD (R) p
 Results: à rédiger. Suivre experiments.
 Conclusion: mini paragraphe à rédiger.
 
-
 D'ici 1h 
 finaliser ma partie (Adonis).
 finaliser soccerCPD (Fotis).
