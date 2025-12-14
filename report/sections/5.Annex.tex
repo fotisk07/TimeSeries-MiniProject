@@ -126,8 +126,40 @@ This appendix gathers all visual material related to the data analysis reference
 This appendix gathers all visual material related to the experiments referenced in Section~\ref{sec:results}.
 
 % -------------------------
-% Attacking vs Defending formations
+% CPD backends
 % -------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{../figures/CPD_backends.png}
+    \caption{
+    Formation change-points detected by different CPD backends on a common timeline.
+    }
+    \label{fig:exp1_cp_timeline_methods}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[t]{0.42\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{../figures/min_fdist.png}
+        \caption{Number of formation segments}
+        \label{fig:exp2_segments_fdist}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.55\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{../figures/exp2_cp_timeline_min_fdist.png}
+        \caption{Formation change-point timeline}
+        \label{fig:exp2_cp_timeline_fdist}
+    \end{subfigure}
+    \caption{
+    Sensitivity of formation change-point detection to the formation distance threshold \texttt{min\_fdist}.
+    Increasing the threshold reduces the number of detected segments while preserving the temporal locations of the most salient change-points.
+    }
+    \label{fig:exp2_fdist}
+\end{figure}
+
+
 \begin{figure}
     \centering
     \includegraphics[width=0.9\linewidth]{../figures/Experiments_AttDefFormations_1925299.png}

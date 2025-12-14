@@ -63,11 +63,7 @@ Parameters are estimated via a constrained EM algorithm: the E-step solves a one
 \subsubsection{Change-Point Detection on Graphs via Delaunay Triangulation}
 
 Given role locations \(V(t) = \{v_1(t), \dots, v_N(t)\}\), each frame is encoded as a role-adjacency graph using Delaunay triangulation. Two roles are connected if they share an edge in the triangulation, producing a binary adjacency matrix \(A(t) \in \{0,1\}^{N \times N}\).
-Formation changes are detected on the sequence \(\{A(t)\}\) using discrete g-segmentation \cite{zhang2019graphbasedtwosampletestsdata}. Dissimilarity between frames is measured by the Manhattan distance
-\[
-d_M(A(t), A(t')) = \|A(t) - A(t')\|_{1,1}.
-\]
-Frames with excessive role switching (rate \(>0.7\)) are discarded. Candidate change-points are retained if they satisfy constraints on statistical significance (\(p < 0.01\)), minimum segment duration (5 minutes), and inter-segment dissimilarity. A recursive procedure recovers multiple change-points, partitioning the match into formation intervals.
+Formation changes are detected on the sequence \(\{A(t)\}\) using discrete g-segmentation \cite{zhang2019graphbasedtwosampletestsdata}. Dissimilarity between frames is measured by the Manhattan distance. Frames with excessive role switching (rate \(>0.7\)) are discarded. Candidate change-points are retained if they satisfy constraints on statistical significance (\(p < 0.01\)), minimum segment duration (5 minutes), and inter-segment dissimilarity. A recursive procedure recovers multiple change-points, partitioning the match into formation intervals.
 
 \subsubsection{Formation Clustering}
 
