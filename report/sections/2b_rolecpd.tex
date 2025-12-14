@@ -4,10 +4,10 @@ The goal of RoleCPD \cite{Kim2022SoccerCPD} is to detect long-term tactical chan
 
 \subsubsection{Formal Representation}
 We define the inputs and mathematiccal framework based on the SoccerCPD protocol:
-\begin{itemize}
-  \item \textbf{Input:} A sequence of "Temporary Role Permutations" $\{\pi_t\}_{t=1}^{|T_i|}$.
-  \item \textbf{Role Permutation ($\pi_t$):} At every frame $t$, the Role Representation step assigns a role $X_p$ to every player $p$. Since roles are distinct, this assignement is a permutation of the initial canonical role: $$\beta_t (p) = \pi_t (X_p)$$ Where $\beta_t$ is the player-to-temporary-role mapping at time $t$.
-\end{itemize}
+
+\textbf{Input:} A sequence of "Temporary Role Permutations" $\{\pi_t\}_{t=1}^{|T_i|}$.
+
+\textbf{Role Permutation ($\pi_t$):} At every frame $t$, the Role Representation step assigns a role $X_p$ to every player $p$. Since roles are distinct, this assignement is a permutation of the initial canonical role: $$\beta_t (p) = \pi_t (X_p)$$ Where $\beta_t$ is the player-to-temporary-role mapping at time $t$.
 
 \subsubsection{The Distance Metric}
 To detect a change, we must quantify the difference between the team's configuration at time $t$ and time $t'$. Since the data consists of permutations (non-Euclidean), we cannot use standard Euclidean distance. We use the Hamming Distance normalized by the number of roles ($N = 10$ outfield players): $$d(\pi_t, \pi_{t'}) = \frac{1}{N} \sum_{p \in P} \mathbbm{1}_{\pi_t(X_p) \neq \pi_{t'}(X_p)}$$ This metric represents the "Switch Rate" or the proportion of players whose roles differ between two frames. Figure~\ref{fig:rolecpd_switchrate} plots this switch rate over time, showing it fluctuates relative to a dominant permutation.
