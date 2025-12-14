@@ -3,7 +3,7 @@
 
 Our study utilizes and analyzes two distinct spatiotemporal dataset types: high-frequency GPS tracking data and event-stream data.
 
-\textbf{High-Frequency Tracking Data:} We utilized the provided sample dataset and supplementary public data from SkillCorner (A-League, 10 Hz) and Last Row (20 Hz). All inputs were converted to the Fitogether format (K-League, 10 Hz), represented as a sequence of 2D coordinates $x_{i, t} \in \mathbb{R}^2$.
+\textbf{High-Frequency Tracking Data:} We utilized the provided sample dataset and supplementary public data from SkillCorner (A-League, 10 Hz) \cite{SkillCorner2020OpenData} and Last Row (20 Hz) \cite{Tavares2020LastRow}. All inputs were converted to the Fitogether format (K-League, 10 Hz), represented as a sequence of 2D coordinates $x_{i, t} \in \mathbb{R}^2$.
 \begin{itemize}
     \item \textbf{Diagnosis:} The signals are clean (missing values <1\%) but exhibit high-frequency jitter consistent with GPS noise. Shapiro-Wilk tests on role clusters indicate deviations from normality due to tactical behaviors (e.g., pressing), yet clusters remain sufficiently separable for EM algorithm convergence.
     \item \textbf{Preprocessing:} : We normalized pitch coordinates to a centered metric system to satisfy the model's Gaussian distribution assumption.
