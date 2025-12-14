@@ -18,11 +18,6 @@ The procedure is as follows:
 \begin{enumerate}
   \item \textbf{Preprocessing:} Calculate the Switch Rate relative to the dominant permutation. Exclude frames with a switch rate $> 0.7$ (likely temporary switches during set-pieces or abnormal situations).
   \item \textbf{Segmentation:} Apply the dectection algorithm recursively on the sequence of permutations using the Hamming distance. Figure~\ref{fig:rolecpd_onedetectedphase} shows the result of a single segmentation step, while Figure~\ref{fig:rolecpd_detectedphases} demonstrates the final output after recursive segmentation captures all tactical phases, accurately recovering the ground truth on the synthetic example.
-  \item \textbf{Significance Test:} A change point $\tau$ is significant if:
-    \begin{itemize}
-      \item The p-value of the scan statistic is $< 0.01$.
-      \item The segmentation duration is sufficient (robustness against noise).
-      \item The most frequent permutations (Instructed Roles) in the segments before and after $\tau$ must be distinct.
-    \end{itemize}
+  \item \textbf{Significance Test:} A change point $\tau$ is significant if: the p-value of the scan statistic is $< 0.01$, the segmentation duration is sufficient (robustness against noise), and the most frequent permutations (Instructed Roles) in the segments before and after $\tau$ must be distinct.
 \end{enumerate}
 

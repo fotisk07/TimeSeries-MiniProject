@@ -1,34 +1,16 @@
 \section{Data} \label{sec:data}
 % The Data section (indicative length : 1 page) should provide a deep analysis of the data used for experiment. In particular, we are interested here in your capacity to provide relevant and thoughtful feedbacks on the data and to demonstrate that you master some "data diagnosis" tools that have been dealt with in the lectures/tutorials.
 
-Our study utilizes two distinct types of spatiotemporal datasets to evaluate the SoccerCPD framework: high-frequency GPS tracking data as used in the original SoccerCPD study, and event-stream data. This section analyzes the properties, quality, and preprocessing requirements of these signals.
+Our study utilizes and analyzes two distinct spatiotemporal dataset types: high-frequency GPS tracking data and event-stream data.
 
-\subsection{High-Frequency Tracking Data}
-For the reproduction of the core algorithm and methods, we utilized the sample dataset provided by the authors. Though usually scarce, we found public tracking data for 10 matches from SkillCorner \cite{SkillCorner2020OpenData}, and GPS data of one play from Last Row \cite{Tavares2020LastRow}. The data characteristics are as follows:
+\textbf{High-Frequency Tracking Data:} We utilized the provided sample dataset and supplementary public data from SkillCorner (A-League, 10 Hz) and Last Row (20 Hz). All inputs were converted to the Fitogether format (K-League, 10 Hz), represented as a sequence of 2D coordinates $x_{i, t} \in \mathbb{R}^2$.
+\begin{itemize}
+    \item \textbf{Diagnosis:} The signals are clean (missing values <1\%) but exhibit high-frequency jitter consistent with GPS noise. Shapiro-Wilk tests on role clusters indicate deviations from normality due to tactical behaviors (e.g., pressing), yet clusters remain sufficiently separable for EM algorithm convergence.
+    \item \textbf{Preprocessing:} : We normalized pitch coordinates to a centered metric system to satisfy the model's Gaussian distribution assumption.
+\end{itemize}
 
-\textbf{Source \& Format:} The Fitogether data originates from the K-League (South Korea) and consists of player trajectories recorded at 10 Hz. The raw input is a sequence of 2D coordinates $x_{i,t} \in \mathbb{R}^2$ representing the position of player $i$ at frame $t$. The SkillCorner data is also at 10 Hz, and comes from the Australian A-League, in the .jsonl format. The Last Row data is a .csv at 20 Hz, but only contains a single play segment. Both datasets were converted to the Fitogether format for consistency.
-
-\textbf{Data Diagnosis \& Quality:} We performed a preliminary diagnosis of the signal stationarity and completeness. The tracking data is relatively clean, with practically no gaps (missing values $< 1\%$). However, we observed high-frequency jitter in the raw trajectories, consistent with GPS measurement noise.
-
-\textbf{Preprocessing:} To satisfy the model's assumption that role centers follow a Gaussian distribution, we normalized the pitch coordinates to a centered metric system. Testing the assumption that player positions within a role follow a Gaussian distribution, Shapiro-Wilk tests on the specific role clusters (e.g., Center Back) showed deviations from normality, likely due to behaviours such as tactical pressing or zonal marking which create skewed distributions. However, the clusters remain sufficiently separable for the EM algorithm to converge.
-
-
-\subsection{StatsBomb Event Data}
-While public high-frequency GPS tracking data is scarce and contains little information besides player locations, datasets such as the StatsBomb Open Data repository present event-stream data. These datasets differ fundamentally, presenting unique challenges for the SoccerCPD pipeline.
-
-\subsubsection{Signal Characteristics and Challenges}
-Unlike the continuous 10 Hz GPS signal, StatsBomb data is event-based, recording location $(x, y)$ only when an on-ball action occurs (e.g., pass, shot, dribble).
-
-\textbf{Sparsity:} The primary diagnosis in Figure~\ref{fig:data-comparison} reveals extreme sparsity. While GPS data provides $\approx 600$ points per minute per player, event data provides fewer than 10 points per minute on average. This challenges the EM algorithm used in the Role Assignment step, which relies on dense spatial clusters to estimate role means $\mu_k$ and covariances $\Sigma_k$.
-
-\textbf{Spatial Bias:} Event data is inherently biased towards the ball's location. Defenders engaging in off-ball marking are often unrecorded in the event stream.
-
-
-\subsubsection{Adaptation and Preprocessing}
-To adapt this data for the SoccerCPD framework, we applied the following transformations:
-
-\textbf{Coordinate Transformation:} StatsBomb coordinates are given in a $[0, 120] \times [0, 80]$ system with the origin at the top-left corner. We projected these to the centered metric system used by the Fitogether model to ensure consistency.
-
-\textbf{Pseudo-Trajectory Generation:} To mitigate sparsity, we aggregated events over temporal windows. Instead of instantaneous frame-by-frame analysis, we treated the collection of event locations within a time window as a sampling of the underlying spatial distribution $\mathcal{F}_i$.
-
-\textbf{Role Proxy:} Since we lack continuous tracks for all 10 players simultaneously, we modified the input feature matrix $A(t)$. Instead of a frame-wise Delaunay graph, we constructed aggregate adjacency matrices based on average positions of players over 5-minute segments, serving as a proxy for the mean role-adjacency matrix.
+\textbf{StatsBomb Event Data:} To address the scarcity of tracking data, we adapted StatsBomb event-stream data, which records location $(x, y)$ only during on-ball actions.
+\begin{itemize}
+    \item \textbf{Challenges:} The data exhibits extreme sparsity (<10 points/min vs. $\approx 600$ for GPS) and inherent spatial bias toward the ball, challenging the EM algorithm's density requirements.
+    \item \textbf{Adaptation:} We projected coordinates ($[0, 120] \times [0,80]$) to the centered metric system. To mitigate sparsity, we generated pseudo-trajectories by aggregating events over temporal windows. Finally, we replaced frame-wise Delaunay graphs with aggregate adjacency matrices based on 5-minute average positions to serve as a proxy for the role-adjacency matrix.
+\end{itemize}
