@@ -84,4 +84,11 @@ Jupyter complet. (Fotis)
 Experiments (Fotis)
 Introduction + Conclusion + Resultats (Adonis)
 
+Slides
+F : Slide 2 à rendre pous jolie + à merge qques elements de la 3 + slide 3
+F : 4
+A : 5 + 6 à condenscer en une slide
+A : Slie 7 transformer citatinos en 1,2,3 + ajouter qu'ona utilisé leurs données + enlenve LastRow
+F : Slide 9 texte à adapter
+A : 11 à rendre plus jilie
 
