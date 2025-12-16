@@ -1,31 +1,30 @@
 \section{Methodology}
 
-\subsection{Formation Change-Point Detection}
-\begin{frame}{FormCPD: Spatial Structure}
-    \frametitle{FormCPD: From Trajectories to Graphs}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \textbf{1. Role Assignment}
-            \begin{itemize}
-                \item Players assigned to latent roles (Gaussian Mixture Models).
-                \item One-to-one mapping via Hungarian Algorithm.
-            \end{itemize}
-            
-            \vspace{0.2cm}
-            
-            \textbf{2. Delaunay Triangulation}
-            \begin{itemize}
-                \item Encodes spatial topology $A(t)$.
-                \item Permutation invariant.
-                \item Distance: $d_M = \|A(t)-A(t')\|_{1,1}$.
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{../figures/RoleCPD_DetectedPhases.png}
-            \captionof{figure}{Topological changes trigger detection.}
-        \end{column}
-    \end{columns}
+\begin{frame}{FormCPD: Formation Change-Point Detection}
+\begin{columns}
+
+% -------- Left: Text (Increased width) --------
+\begin{column}{0.53\textwidth}
+\begin{enumerate}
+    \item \textbf{Role Assignment:} Map players to latent spatial zones via EM.
+    \item \textbf{Graph Encoding:} Build adjacency matrices using Delaunay triangulation.
+    \item \textbf{Change Detection:} Use recursive g-segmentation to find where graph topology shifts.
+    \item \textbf{Pattern Clustering:} Group segments into canonical types via alignment.
+\end{enumerate}
+\end{column}
+
+\begin{column}{0.47\textwidth}
+    \centering
+    \includegraphics[
+        width=\linewidth,
+        height=0.75\textheight,
+        keepaspectratio
+    ]{../figures/pp_illus.png}
+    \captionof{figure}{Pipeline}
+\end{column}
+
+
+\end{columns}
 \end{frame}
 
 \subsection{Role Change-Point Detection}

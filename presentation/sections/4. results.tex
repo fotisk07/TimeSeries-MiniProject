@@ -1,23 +1,25 @@
 \section{Results \& Extensions}
 
-\subsection{Sensitivity Analysis}
-\begin{frame}{Robustness: Sensitivity Analysis}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \textbf{Parameter: \texttt{min\_fdist}}
-            \begin{itemize}
-                \item Controls threshold for declaring a new formation.
-                \item \textbf{Finding:} Higher threshold acts as a pruning mechanism.
-                \item \textbf{Result:} Major tactical shifts remain stable; minor noise is filtered out.
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{../figures/exp2_cp_timeline_min_fdist.png}
-            \captionof{figure}{Timeline stability across thresholds.}
-        \end{column}
-    \end{columns}
+\begin{frame}{Experiments on SoccerCPD : Robustness Analysis}
+\textbf{Comparison across CPD backends (single match).}
+\begin{itemize}
+    \item Four backends tested: \texttt{gseg\_avg}, \texttt{gseg\_union}, \texttt{kernel\_rbf}, \texttt{kernel\_linear}.
+    \item Identical preprocessing and hyperparameters.
+    \item All methods detect formation changes at similar times.
+    \item Differences correspond to sensitivity (extra/missing CPs), not different segmentations.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Sensitivity to hyperparameters (\texttt{gseg\_avg}).}
+\begin{itemize}
+    \item Increasing \texttt{min\_fdist} reduces the number of segments while preserving CP locations.
+    \item \texttt{min\_fdist} acts as a pruning threshold for minor structural variations.
+    \item Varying \texttt{min\_pdur} has no effect, indicating well-separated formation changes.
+\end{itemize}
+
 \end{frame}
+
 
 
 \subsection{Extension 1: Possession Context}
