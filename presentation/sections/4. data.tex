@@ -1,0 +1,23 @@
+\section{Data Analysis}
+\begin{frame}{Data Sources and Diagnosis}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{High-Frequency Tracking (GPS)}
+            \begin{itemize}
+                \item SkillCorner (10Hz) \& Last Row (20Hz).
+                \item Clean signals, suitable for Gaussian assumptions.
+            \end{itemize}
+        
+            \textbf{Event-Stream (StatsBomb)}
+            \begin{itemize}
+                \item \textbf{Challenge:} Extreme sparsity ($<10$ pts/min).
+                \item \textbf{Adaptation:} Pseudo-trajectories via temporal aggregation (5-min average).
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/data-heatmap_comparison.png}
+            \captionof{figure}{GPS vs Event Data Density}
+        \end{column}
+    \end{columns}
+\end{frame}

@@ -1,0 +1,72 @@
+\section{Methodology}
+
+\begin{frame}{Methodology: FormCPD (1/2)}
+    \framesubtitle{Role Assignment and Spatial Structure}
+
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{1. Role Assignment}
+            \begin{itemize}
+                \item Latent spatial roles via constrained EM.
+            \end{itemize}
+
+            \textbf{2. Delaunay Triangulation}
+            \begin{itemize}
+                \item Encodes local spatial relations.
+                \item Binary role-adjacency matrix $A(t)$.
+                \item Permutation invariant, topological.
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/delany_form_change.png}
+            \captionof{figure}{Delaunay reconfiguration}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Methodology: FormCPD (2/2)}
+    \framesubtitle{Change-Point Detection}
+
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Discrete g-segmentation}
+            \begin{itemize}
+                \item Sequence $\{A(t)\}$.
+                \item Distance $d_M = \|A(t)-A(t')\|_{1,1}$.
+                \item Constraints: $p<0.01$, min duration 5 min.
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=0.9\linewidth]{../figures/A_mean.png}
+            \captionof{figure}{Mean adjacency matrices}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Methodology: RoleCPD}
+    \framesubtitle{Intraphase Tactical Shifts}
+
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \item Detect permanent role swaps.
+                \item Switch Rate:
+                \[
+                d(\pi_t,\pi_{t'}) = \frac{1}{N}
+                \sum_p \mathbbm{1}_{\pi_t(X_p)\neq\pi_{t'}(X_p)}
+                \]
+                \item Recursive g-segmentation after filtering.
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/RoleCPD_DetectedPhases.png}
+            \captionof{figure}{Recovered tactical phases}
+        \end{column}
+    \end{columns}
+\end{frame}

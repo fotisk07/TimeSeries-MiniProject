@@ -39,7 +39,7 @@ In alignment with the course requirements, this report details our reproduction 
 
 \textbf{Work Repartition:} The workload followed the pipeline's structure. One student focused on the \textbf{FormCPD} stage, implementing the Delaunay-based adjacency generation and formation change detection. The other concentrated on \textbf{RoleCPD}, handling the generation of synthetic role data, permutation analysis, and the recursive segmentation algorithm.
 
-\textbf{Source Code \& Implementation:} We adapted the SoccerCPD code to be used as a python package. We also reproduced the core analysis by implementing it in Python, integrating an R-based backend for the Generalized Edge-Count test (g-segmentation) to improve detection accuracy. We also implemented a Python-based fallback for change-point detection to ensure robustness when the R-bridge encounters errors.
+\textbf{Source Code \& Implementation:} We adapted the SoccerCPD code to be used as a python package. We also reproduced the core analysis by implementing it in Python, integrating an R-based backend for the Generalized Edge-Count test (g-segmentation) to improve detection accuracy. We also implemented a Python-based fallback for change-point detection to ensure robustness when the R-bridge encounters errors. Full code can be found here : https://github.com/fotisk07/TimeSeries-MiniProject
 
 \textbf{Experiments:} We verified the method on synthetic datasets, successfully detecting ground-truth change points. We also performed a sensitivity analysis using the provided source code. For real-world applications, we analyzed a Barcelona match, specifically detecting tactical phases and visualizing role allocations.
 

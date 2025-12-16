@@ -1,0 +1,62 @@
+\section{Results}
+
+\begin{frame}{Results: Sensitivity Analysis}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Sensitivity to \texttt{min\_fdist}}
+            \begin{itemize}
+                \item \texttt{min\_fdist}: Threshold for formation distance.
+                \item \textbf{Observation:} Increasing threshold reduces segment count but preserves stable change-points.
+                \item \textbf{Conclusion:} Acts as a pruning mechanism for minor structural variations.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/exp2_cp_timeline_min_fdist.png}
+            \captionof{figure}{Timeline stability under varying thresholds}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Extension 1: Possession Context}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Refining Formation Analysis}
+            \begin{itemize}
+                \item \textbf{Limitation:} Global average ignores game state.
+                \item \textbf{Method:} Filter frames (Attack vs. Defense).
+                \item \textbf{Result (Match 1925299):}
+                \begin{itemize}
+                    \item \textbf{Defending (Left):} Compact block.
+                    \item \textbf{Attacking (Right):} Wider, advanced shape.
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/Experiments_AttDefFormations_1925299.png}
+            \captionof{figure}{Defending vs Attacking Formations}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Extension 2: Player Stationarity Metric}
+    \begin{columns}
+        \begin{column}{0.55\textwidth}
+            \textbf{Quantifying Role Fluidity}
+            \begin{itemize}
+                \item \textbf{Metric:} Std dev of Euclidean distance between player position and role center.
+                \item \textbf{Findings (A-League):}
+                \begin{itemize}
+                    \item Captures variance in movement within a "stable" phase.
+                    \item Distinguishes "Fixed" roles (CB) from "Roaming" roles (Wingers/Midfield).
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/Experiments_Player_Stationarity_Phase1_1925299.png}
+            \captionof{figure}{Player Stationarity (Phase 1)}
+        \end{column}
+    \end{columns}
+\end{frame}
