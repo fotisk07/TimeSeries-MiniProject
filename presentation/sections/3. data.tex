@@ -1,23 +1,39 @@
 \section{Data Analysis}
-\begin{frame}{Data Sources and Diagnosis}
+
+\begin{frame}{Data Sources \& Challenges}
+    \frametitle{High-Frequency vs. Sparse Event Data}
+    
     \begin{columns}
         \begin{column}{0.5\textwidth}
-            \textbf{High-Frequency Tracking (GPS)}
+            \textbf{1. Tracking Data (GPS)}
             \begin{itemize}
-                \item SkillCorner (10Hz) \& Last Row (20Hz).
-                \item Clean signals, suitable for Gaussian assumptions.
-            \end{itemize}
-        
-            \textbf{Event-Stream (StatsBomb)}
-            \begin{itemize}
-                \item \textbf{Challenge:} Extreme sparsity ($<10$ pts/min).
-                \item \textbf{Adaptation:} Pseudo-trajectories via temporal aggregation (5-min average).
+                \item \textbf{Source:} SkillCorner (10Hz) \cite{SkillCorner2020OpenData}, Last Row (20Hz) \cite{Tavares2020LastRow}.
+                \item \textbf{Quality:} Dense, clean signals.
+                \item \textbf{Prep:} Normalized to centered metric pitch.
             \end{itemize}
         \end{column}
         \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{../figures/data-heatmap_comparison.png}
-            \captionof{figure}{GPS vs Event Data Density}
+            \textbf{2. Event Data (StatsBomb)}
+            \begin{itemize}
+                \item \textbf{Source:} On-ball events only.
+                \item \textbf{Challenge:} Extreme sparsity ($<10$ pts/min vs 600+ for GPS).
+                \item \textbf{Bias:} Spatial bias toward the ball.
+            \end{itemize}
         \end{column}
     \end{columns}
+    
+    \vspace{0.3cm}
+    
+    \textbf{Novel Adaptation for Event Data:}
+    \begin{itemize}
+        \item \textbf{Pseudo-Trajectories:} Aggregated events over 5-minute rolling windows.
+        \item \textbf{Proxy Graph:} Average adjacency matrices instead of frame-by-frame Delaunay.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Data Diagnosis}
+    \frametitle{Density Comparison}
+    \centering
+    \includegraphics[width=0.8\linewidth]{../figures/data-heatmap_comparison.png}
+    \captionof{figure}{Heatmap: Dense GPS coverage vs. Sparse/Biased Event Data.}
 \end{frame}

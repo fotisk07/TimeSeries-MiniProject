@@ -1,45 +1,51 @@
 \section{Introduction}
 \subsection{Context and Problem Statement}
-\begin{frame}{Context}
-    \frametitle{Context and Problem Statement}
-    \begin{itemize}
-        \item \textbf{Context:} Analyzing team formation is crucial for interpreting tactics in fluid sports like soccer.
-        \item \textbf{The Challenge:} Tracking data is noisy; players frequently switch positions temporarily.
-        \item \textbf{Limitation of existing methods:} Often assume constant formations or react too sensitively to frame-by-frame noise.
-        \item \textbf{Objective:} Reproduce and extend \textbf{SoccerCPD} \cite{Kim2022SoccerCPD}, an unsupervised framework that distinguishes:
-        \begin{itemize}
-            \item \textbf{FormCPD:} Shifts in global spatial configuration.
-            \item \textbf{RoleCPD:} Long-term tactical changes in individual roles.
-        \end{itemize}
-    \end{itemize}
+\begin{frame}{Context \& Problem Statement}
+    \frametitle{Context: The Fluidity of Soccer}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{The Challenge in Sports Analytics}
+            \begin{itemize}
+                \item \textbf{Dynamic Formations:} Teams constantly reshape (e.g., 4-4-2 $\to$ 3-5-2) based on game state.
+                \item \textbf{Noisy Data:} Players swap positions temporarily (overlap, pressing).
+                \item \textbf{The Gap:} Standard methods often assume static formations or are too sensitive to noise.
+            \end{itemize}
+            
+            \vspace{0.5cm}
+            
+            \textbf{Project Goal}
+            \begin{itemize}
+                \item Reproduce and extend \textbf{SoccerCPD} \cite{Kim2022SoccerCPD}, a change-point detection framework.
+                \item Distinguish \textbf{Strategic Changes} (permanent) from \textbf{Tactical Adjustments} (temporary).
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=0.9\linewidth]{../figures/delany_form_change.png}
+            \captionof{figure}{Formation shifts captured via Delaunay triangulation.}
+        \end{column}
+    \end{columns}
 \end{frame}
+
 
 \subsection{Work Done \& Contributions}
 \begin{frame}{Contributions}
-    \frametitle{{Work Repartition and Contributions}}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            \textbf{Work Repartition}
-            \begin{itemize}
-                \item \textbf{FormCPD:} Delaunay-based adjacency and formation CPD.
-                \item \textbf{RoleCPD:} Synthetic role data, permutation analysis, recursive segmentation.
-            \end{itemize}
+    \frametitle{Work Repartition \& Novel Contributions}
+    
+    \textbf{1. Reproduction \& Implementation}
+    \begin{itemize}
+        \item \textbf{Full Pipeline:} Python package with R backend (for \texttt{g-segmentation}).
+        \item \textbf{FormCPD:} Delaunay-based spatial change detection.
+        \item \textbf{RoleCPD:} Permutation-based role switch detection.
+    \end{itemize}
 
-            \vspace{0.3cm}
+    \vspace{0.3cm}
 
-            \textbf{Implementation \& Extensions}
-            \begin{itemize}
-                \item Python package with R backend (g-segmentation).
-                \item \textbf{Novel metric:} Player stationarity.
-                \item \textbf{Refinement:} Possession-context formations.
-            \end{itemize}
-        \end{column}
-
-        \begin{column}{0.4\textwidth}
-            \centering
-            \includegraphics[width=\linewidth]{../figures/role_swap.png}
-            \captionof{figure}{Role vs Player coloring}
-        \end{column}
-    \end{columns}
+    \textbf{2. Novel Extensions (Beyond the Paper)}
+    \begin{itemize}
+        \item \textbf{Possession Context:} Separating Attacking vs. Defensive shapes.
+        \item \textbf{Player Stationarity Metric:} Quantifying role fluidity (Fixed vs. Roaming).
+        \item \textbf{Event Data Generalization:} Adapting the framework for sparse StatsBomb data.
+    \end{itemize}
 \end{frame}
     

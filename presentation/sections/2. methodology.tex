@@ -1,73 +1,72 @@
 \section{Methodology}
-\subsection{Formation Change-Point Detection}
-\begin{frame}{FormCPD 1}
-    \frametitle{FormCPD: Role Assignment and Spatial Structure}
 
+\subsection{Formation Change-Point Detection}
+\begin{frame}{FormCPD: Spatial Structure}
+    \frametitle{FormCPD: From Trajectories to Graphs}
     \begin{columns}
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.5\textwidth}
             \textbf{1. Role Assignment}
             \begin{itemize}
-                \item Latent spatial roles via constrained EM.
+                \item Players assigned to latent roles (Gaussian Mixture Models).
+                \item One-to-one mapping via Hungarian Algorithm.
             \end{itemize}
-
+            
+            \vspace{0.2cm}
+            
             \textbf{2. Delaunay Triangulation}
             \begin{itemize}
-                \item Encodes local spatial relations.
-                \item Binary role-adjacency matrix $A(t)$.
-                \item Permutation invariant, topological.
+                \item Encodes spatial topology $A(t)$.
+                \item Permutation invariant.
+                \item Distance: $d_M = \|A(t)-A(t')\|_{1,1}$.
             \end{itemize}
         \end{column}
-
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.5\textwidth}
             \centering
             \includegraphics[width=\linewidth]{../figures/delany_form_change.png}
-            \captionof{figure}{Delaunay reconfiguration}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{FormCPD 2}
-    \frametitle{FormCPD: Change-Point Detection}
-
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \textbf{Discrete g-segmentation}
-            \begin{itemize}
-                \item Sequence $\{A(t)\}$.
-                \item Distance $d_M = \|A(t)-A(t')\|_{1,1}$.
-                \item Constraints: $p<0.01$, min duration 5 min.
-            \end{itemize}
-        \end{column}
-
-        \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=0.9\linewidth]{../figures/A_mean.png}
-            \captionof{figure}{Mean adjacency matrices}
+            \captionof{figure}{Topological changes trigger detection.}
         \end{column}
     \end{columns}
 \end{frame}
 
 \subsection{Role Change-Point Detection}
-\begin{frame}{RoleCPD}
-    \frametitle{RoleCPD: Intraphase Tactical Shifts}
-
+\begin{frame}{RoleCPD: The Concept}
+    \frametitle{RoleCPD: Detecting Intraphase Swaps}
+    
+    \textbf{Objective:} Detect permanent role swaps (e.g., Wingers switching sides) within a stable formation.
+    
+    \vspace{0.3cm}
+    
     \begin{columns}
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.5\textwidth}
+            \textbf{The Metric: Switch Rate}
             \begin{itemize}
-                \item Detect permanent role swaps.
-                \item Switch Rate:
+                \item Input: Sequence of role permutations $\pi_t$.
+                \item \textbf{Hamming Distance:}
                 \[
-                d(\pi_t,\pi_{t'}) = \frac{1}{N}
-                \sum_p \mathbbm{1}_{\pi_t(X_p)\neq\pi_{t'}(X_p)}
+                d(\pi_t, \pi_{t'}) = \frac{1}{N} \sum_p \mathbb{I}_{\pi_t(X_p) \neq \pi_{t'}(X_p)}
                 \]
-                \item Recursive g-segmentation after filtering.
+                \item Measures deviation from the "Dominant Permutation".
             \end{itemize}
         \end{column}
-
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=\linewidth]{../figures/RoleCPD_DetectedPhases.png}
-            \captionof{figure}{Recovered tactical phases}
+            \includegraphics[width=0.9\linewidth]{../figures/role_swap.png}
+            \captionof{figure}{Synthetic Role Swap Data}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{RoleCPD: Algorithm}
+    \frametitle{RoleCPD: Recursive Segmentation}
+    
+    \textbf{Discrete g-segmentation on Permutations}
+    \begin{enumerate}
+        \item \textbf{Pre-process:} Filter frames with Switch Rate $> 0.7$ (temporary noise).
+        \item \textbf{Recursive Search:} 
+        \begin{itemize}
+            \item Apply graph-based change-point detection on the sequence.
+            \item \textbf{Stopping Criteria:} $p\text{-value} > 0.01$ or segment length $< 5$ min.
+        \end{itemize}
+        \item \textbf{Result:} Identifies distinct tactical role configurations.
+    \end{enumerate}
 \end{frame}

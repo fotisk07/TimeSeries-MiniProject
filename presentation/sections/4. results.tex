@@ -1,64 +1,122 @@
-\section{Results}
+\section{Results \& Extensions}
+
 \subsection{Sensitivity Analysis}
-\begin{frame}{Sensitivity Analysis}
+\begin{frame}{Robustness: Sensitivity Analysis}
     \begin{columns}
         \begin{column}{0.5\textwidth}
-            \textbf{Sensitivity to \texttt{min\_fdist}}
+            \textbf{Parameter: \texttt{min\_fdist}}
             \begin{itemize}
-                \item \texttt{min\_fdist}: Threshold for formation distance.
-                \item \textbf{Observation:} Increasing threshold reduces segment count but preserves stable change-points.
-                \item \textbf{Conclusion:} Acts as a pruning mechanism for minor structural variations.
+                \item Controls threshold for declaring a new formation.
+                \item \textbf{Finding:} Higher threshold acts as a pruning mechanism.
+                \item \textbf{Result:} Major tactical shifts remain stable; minor noise is filtered out.
             \end{itemize}
         \end{column}
         \begin{column}{0.5\textwidth}
             \centering
             \includegraphics[width=\linewidth]{../figures/exp2_cp_timeline_min_fdist.png}
-            \captionof{figure}{Timeline stability under varying thresholds}
+            \captionof{figure}{Timeline stability across thresholds.}
         \end{column}
     \end{columns}
 \end{frame}
 
-\subsection{Possession Context}
-\begin{frame}{Extension 1: Offensive and Defensive Formations}
+
+\subsection{Extension 1: Possession Context}
+\begin{frame}{Extension 1: Attack vs. Defense}
+    \frametitle{Contextualizing Formations (GPS)}
+    \textbf{Problem:} A single "average" centroid formation ignores game state.
+    \vspace{0.2cm}
+    
     \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \textbf{Refining Formation Analysis}
+        \begin{column}{0.4\textwidth}
+            \textbf{Method:}
             \begin{itemize}
-                \item \textbf{Limitation:} Global average ignores game state.
-                \item \textbf{Method:} Filter frames (Attack vs. Defense).
-                \item \textbf{Result (Match 1925299):}
-                \begin{itemize}
-                    \item \textbf{Defending (Left):} Compact block.
-                    \item \textbf{Attacking (Right):} Wider, advanced shape.
-                \end{itemize}
+                \item Filter frames by possession status.
+                \item Compute centroids separately.
+            \end{itemize}
+            \textbf{Insight:}
+            \begin{itemize}
+                \item \textcolor{blue}{Defense:} Compact block.
+                \item \textcolor{red}{Attack:} Wide, expansive shape.
             \end{itemize}
         \end{column}
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.6\textwidth}
             \centering
             \includegraphics[width=\linewidth]{../figures/Experiments_AttDefFormations_1925299.png}
-            \captionof{figure}{Defending vs Attacking Formations}
+            \captionof{figure}{Match 1925299: Distinct shapes detected.}
         \end{column}
     \end{columns}
 \end{frame}
 
-\subsection{Player Stationarity}
+
+\subsection{Extension 2: Player Stationarity}
 \begin{frame}{Extension 2: Player Stationarity Metric}
+    \frametitle{Quantifying Role Fluidity ($\sigma$)}
+    
+    \textbf{Definition:} Standard deviation of Euclidean distance from the role center.
+    
     \begin{columns}
-        \begin{column}{0.55\textwidth}
-            \textbf{Quantifying Role Fluidity}
+        \begin{column}{0.5\textwidth}
+            \textbf{GPS Data Findings (A-League)}
             \begin{itemize}
-                \item \textbf{Metric:} Std dev of Euclidean distance between player position and role center.
-                \item \textbf{Findings (A-League):}
+                \item \textbf{Fixed Roles:} CBs show low $\sigma$ (Stationary).
+                \item \textbf{Roaming Roles:} Wingers/Midfielders show high $\sigma$.
+                \item Validates tactical roles beyond simple coordinates.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/Experiments_Player_Stationarity_Phase1_1925299.png}
+            \captionof{figure}{Stationarity profile (GPS Data).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\subsection{Extension 3: Event Data Generalization}
+\begin{frame}{Validation 1: Event Data Formations}
+    \frametitle{Offensive vs. Defensive Structures (FC Barcelona)}
+    
+    We extended the "Possession Context" analysis to sparse StatsBomb data.
+    
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Tactical Shapes in Sparse Data}
+            \begin{itemize}
+                \item Despite low data density, distinct shapes emerge when aggregated over time.
+                \item \textbf{Defense:} High density in central zones (low width).
+                \item \textbf{Attack:} Wingers push high and wide; full-backs overlap.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{../figures/Experiments_Barca_Formations_By_Phase.png} 
+            \captionof{figure}{Barcelona: Attack (Red) vs Defense (Blue).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}{Validation 2: Event Data Stationarity}
+    \frametitle{Quantifying Fluidity in Event Data}
+    
+    Does the "Stationarity Metric" hold up with sparse event streams?
+    
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Comparison Results}
+            \begin{itemize}
+                \item \textbf{Consistency:} The "Fixed" vs. "Fluid" distinction persists.
+                \item \textbf{Phase Analysis (Barcelona):} 
                 \begin{itemize}
-                    \item Captures variance in movement within a "stable" phase.
-                    \item Distinguishes "Fixed" roles (CB) from "Roaming" roles (Wingers/Midfield).
+                    \item \textit{Attack Phase:} High deviation (Avg ~12m) $\to$ Fluidity.
+                    \item \textit{Defense Phase:} Lower deviation (Avg ~9.6m) $\to$ Rigidity.
                 \end{itemize}
             \end{itemize}
         \end{column}
-        \begin{column}{0.45\textwidth}
+        \begin{column}{0.5\textwidth}
             \centering
-            \includegraphics[width=\linewidth]{../figures/Experiments_Player_Stationarity_Phase1_1925299.png}
-            \captionof{figure}{Player Stationarity (Phase 1)}
+            \includegraphics[width=\linewidth]{../figures/Experiments_Barca_Stationarity_Phase1.png} 
+            \captionof{figure}{Stationarity: FC Barcelona (Event Data).}
         \end{column}
     \end{columns}
 \end{frame}
